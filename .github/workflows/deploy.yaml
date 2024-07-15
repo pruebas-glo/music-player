@@ -46,29 +46,8 @@ jobs:
           sed -i 's|tag:.*|tag: '${{ github.sha }}'|' ./music-player/values.yaml
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
+          git checkout main
+          git pull origin main
           git add ./music-player/values.yaml
           git commit -m "Update Helm values.yaml with new image tags"
-          git push
-
-      - name: Set up kubectl
-        run: |
-          kubectl config set-cluster my-cluster --server=${{ secrets.KUBE_API_SERVER }}
-          echo "${{ secrets.KUBE_CA_DATA }}" | base64 --decode > /tmp/ca.crt
-          kubectl config set clusters.my-cluster.certificate-authority /tmp/ca.crt
-          kubectl config set-credentials my-user --token=${{ secrets.KUBE_TOKEN }}
-          kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=default
-          kubectl config use-context my-context
-
-      - name: Verify Kubernetes Connection
-        run: kubectl get nodes
-
-      - name: Debug Kubernetes Config
-        run: kubectl config view --raw
-
-      - name: Set up Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-      - name: Update Kubernetes deployment with Helm
-        run: |
-          helm upgrade --install my-app ./helm --namespace default
+          git push origin main
