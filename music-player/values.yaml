@@ -6,27 +6,3 @@ frontend:
   image:
     repository: jaimehenao8126/globant-frontend
     tag: 75630ac89491f94e6ff7a5f226ac7f3b44180a2d
-
-# # values.yaml
-
-# replicaCount: 1
-
-# backend:
-#   image:
-#     repository: jaimehenao8126/globant-frontend
-#     tag: 75630ac89491f94e6ff7a5f226ac7f3b44180a2d
-
-# frontend:
-#   image:
-#     repository: jaimehenao8126/globant-frontend
-#     tag: 75630ac89491f94e6ff7a5f226ac7f3b44180a2d
-
-# service:
-#   type: ClusterIP
-#   port: 80
-
-# strategy:
-#   type: RollingUpdate
-#   rollingUpdate:
-#     maxUnavailable: 1
-#     maxSurge: 1

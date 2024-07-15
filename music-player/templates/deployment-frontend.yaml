@@ -1,46 +1,19 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: frontend
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: frontend
-#   template:
-#     metadata:
-#       labels:
-#         app: frontend
-#     spec:
-#       containers:
-#       - name: frontend
-#         image: {{ .Values.frontend.image }}
-#         ports:
-#         - containerPort: 80
-
-# templates/deployment-backend.yaml
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: frontend
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: backend
-  strategy:
-    type: {{ .Values.strategy.type }}
-    rollingUpdate:
-      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      app: frontend
   template:
     metadata:
       labels:
-        app: backend
+        app: frontend
     spec:
       containers:
-      - name: backend
-        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+      - name: frontend
+        image: {{ .Values.frontend.image }}
         ports:
-        - containerPort: 8080
+        - containerPort: 80
