@@ -1,5 +1,15 @@
-frontend:
-  image: jaimehenao8126/frontend:latest
+# frontend:
+#   image: jaimehenao8126/frontend:latest
 
+# backend:
+#   image: jaimehenao8126/backend:latest
+
+# values.yaml
 backend:
-  image: jaimehenao8126/backend:latest
+  image:
+    repository: my-docker-account/globant-backend
+    tag: latest
+frontend:
+  image:
+    repository: my-docker-account/globant-frontend
+    tag: latest
