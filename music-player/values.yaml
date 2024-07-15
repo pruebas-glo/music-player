@@ -8,8 +8,8 @@
 backend:
   image:
     repository: jaimehenao8126/globant-frontend
-    tag: 70f2717e4342d0a700508c3dd8e52e1cc7a68af1
+    tag: 23d826777e91b2a864419bb557d8363441413918
 frontend:
   image:
     repository: jaimehenao8126/globant-frontend
-    tag: 70f2717e4342d0a700508c3dd8e52e1cc7a68af1
+    tag: 23d826777e91b2a864419bb557d8363441413918
