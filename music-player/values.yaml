@@ -1,0 +1,5 @@
+frontend:
+  image: jaimehenao8126/frontend:latest
+
+backend:
+  image: jaimehenao8126/backend:latest
