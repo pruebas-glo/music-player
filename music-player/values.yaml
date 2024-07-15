@@ -1,15 +1,32 @@
-# frontend:
-#   image: jaimehenao8126/frontend:latest
-
 # backend:
-#   image: jaimehenao8126/backend:latest
+#   image:
+#     repository: jaimehenao8126/globant-frontend
+#     tag: 23d826777e91b2a864419bb557d8363441413918
+# frontend:
+#   image:
+#     repository: jaimehenao8126/globant-frontend
+#     tag: 23d826777e91b2a864419bb557d8363441413918
 
 # values.yaml
+
+replicaCount: 1
+
 backend:
   image:
-    repository: jaimehenao8126/globant-frontend
+    repository: jaimehenao8126/globant-backend
     tag: 23d826777e91b2a864419bb557d8363441413918
+
 frontend:
   image:
     repository: jaimehenao8126/globant-frontend
     tag: 23d826777e91b2a864419bb557d8363441413918
+
+service:
+  type: ClusterIP
+  port: 80
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
