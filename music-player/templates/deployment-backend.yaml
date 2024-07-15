@@ -1,12 +1,19 @@
+# templates/deployment-backend.yaml
+
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
 #   name: backend
 # spec:
-#   replicas: 1
+#   replicas: {{ .Values.replicaCount }}
 #   selector:
 #     matchLabels:
 #       app: backend
+#   strategy:
+#     type: {{ .Values.strategy.type }}
+#     rollingUpdate:
+#       maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+#       maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
 #   template:
 #     metadata:
 #       labels:
@@ -14,26 +21,24 @@
 #     spec:
 #       containers:
 #       - name: backend
-#         image: {{ .Values.backend.image }}
+#         image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
 #         ports:
 #         - containerPort: 8080
-
-# templates/deployment-backend.yaml
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
 spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      app: backend
+  replicas: {{ .Values.backend.replicaCount }}
   strategy:
     type: {{ .Values.strategy.type }}
     rollingUpdate:
       maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
       maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+  selector:
+    matchLabels:
+      app: backend
   template:
     metadata:
       labels:
