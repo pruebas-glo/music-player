@@ -1,41 +1,57 @@
-name: Deploy to Kubernetes
+name: CD
 
 on:
   push:
     branches:
       - main
+    paths:
+      - '**'
+      - '!README.md'
+
+env:
+  IMAGE_NAME: globant
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -f ./Docker/Dockerfile ./Docker
 
-    - name: Build and push Docker image
-      run: |
-        docker buildx build --push --platform linux/amd64,linux/arm64 \
-          -t jaimehenao8126/frontend:latest ./frontend
-        docker buildx build --push --platform linux/amd64,linux/arm64 \
-          -t jaimehenao8126/backend:latest ./backend
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-    - name: Configure kubectl
-      run: |
-        echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-        export KUBECONFIG=kubeconfig
-        kubectl config set-context --current --namespace=default
+      - name: Update values.yaml and commit
+        run: |
+          sed -i 's|repository:.*|repository: '${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}'|' ./helm/values.yaml
+          sed -i 's|tag:.*|tag: '${{ github.sha }}'|' ./helm/values.yaml
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add ./helm/values.yaml
+          git commit -m "Update Helm values.yaml with new image tag"
+          git push
 
-    - name: Update Kubernetes deployment
-      run: |
-        kubectl rollout restart deployment frontend
-        kubectl rollout restart deployment backend
+      - name: Set up kubectl
+        run: |
+          kubectl config set-cluster my-cluster --server=${{ secrets.KUBE_API_SERVER }} --certificate-authority-data=${{ secrets.KUBE_CA_DATA }}
+          kubectl config set-credentials my-user --token=${{ secrets.KUBE_TOKEN }}
+          kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=default
+          kubectl config use-context my-context
+
+      - name: Set up Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Update Kubernetes deployment with Helm
+        run: |
+          helm upgrade --install music-player ./helm --namespace default
