@@ -52,7 +52,8 @@ jobs:
 
       - name: Set up kubectl
         run: |
-          kubectl config set-cluster my-cluster --server=${{ secrets.KUBE_API_SERVER }} --certificate-authority-data=${{ secrets.KUBE_CA_DATA }}
+          kubectl config set-cluster my-cluster --server=${{ secrets.KUBE_API_SERVER }}
+          kubectl config set clusters.my-cluster.certificate-authority-data ${KUBE_CA_DATA}
           kubectl config set-credentials my-user --token=${{ secrets.KUBE_TOKEN }}
           kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=default
           kubectl config use-context my-context
