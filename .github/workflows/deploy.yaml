@@ -83,16 +83,21 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Backend Docker image
+      - name: Remove existing buildx builder instance
+        run: |
+          docker buildx rm mybuilder || true
+
+      - name: Create and use a new buildx builder instance
         run: |
           docker buildx create --name mybuilder --use
           docker buildx inspect --bootstrap
+
+      - name: Build and Push Backend Docker image
+        run: |
           docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}:${{ github.sha }} -f ./backend/Dockerfile --push ./backend
 
       - name: Build and Push Frontend Docker image
         run: |
-          docker buildx create --name mybuilder --use
-          docker buildx inspect --bootstrap
           docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ github.sha }} -f ./frontend/Dockerfile --push ./frontend
 
       - name: Update Helm values.yaml
