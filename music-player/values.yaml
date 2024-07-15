@@ -7,9 +7,9 @@
 # values.yaml
 backend:
   image:
-    repository: my-docker-account/globant-backend
-    tag: latest
+    repository: jaimehenao8126/globant-frontend
+    tag: 00725f837199f15a049390cf949e43f5157d2702
 frontend:
   image:
-    repository: my-docker-account/globant-frontend
-    tag: latest
+    repository: jaimehenao8126/globant-frontend
+    tag: 00725f837199f15a049390cf949e43f5157d2702
