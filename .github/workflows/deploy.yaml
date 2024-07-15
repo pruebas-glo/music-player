@@ -59,6 +59,12 @@ jobs:
           kubectl config set-context my-context --cluster=my-cluster --user=my-user --namespace=default
           kubectl config use-context my-context
 
+      - name: Verify Kubernetes Connection
+        run: kubectl get nodes
+
+      - name: Debug Kubernetes Config
+        run: kubectl config view --raw
+
       - name: Set up Helm
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
