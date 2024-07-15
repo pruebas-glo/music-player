@@ -1,11 +1,11 @@
 # backend:
 #   image:
 #     repository: jaimehenao8126/globant-frontend
-#     tag: 23d826777e91b2a864419bb557d8363441413918
+#     tag: 5d95f5c0c79a87bb93b37ae98b7ad355aee7e541
 # frontend:
 #   image:
 #     repository: jaimehenao8126/globant-frontend
-#     tag: 23d826777e91b2a864419bb557d8363441413918
+#     tag: 5d95f5c0c79a87bb93b37ae98b7ad355aee7e541
 
 # values.yaml
 
@@ -13,13 +13,13 @@ replicaCount: 1
 
 backend:
   image:
-    repository: jaimehenao8126/globant-backend
-    tag: 23d826777e91b2a864419bb557d8363441413918
+    repository: jaimehenao8126/globant-frontend
+    tag: 5d95f5c0c79a87bb93b37ae98b7ad355aee7e541
 
 frontend:
   image:
     repository: jaimehenao8126/globant-frontend
-    tag: 23d826777e91b2a864419bb557d8363441413918
+    tag: 5d95f5c0c79a87bb93b37ae98b7ad355aee7e541
 
 service:
   type: ClusterIP
